@@ -20,8 +20,8 @@ Add this to your environment.rb file:
 == Usage
 
 Just add a config file named ldap.yml in config/initializers.rb:
-If you prefer you can change default config file name by setting +ldap_config_file+  configuration parameter
-For example, inside the avdt_ldap initializer:
+If you prefer you can change default config file name by setting +ldap_config_file+  configuration parameter.
+<br/>For example, inside the avdt_ldap initializer:
 
   AvdtLdap.configure do |c|
     c.ldap_config_file = "#{Rails.root}/config/foobar.yml"
