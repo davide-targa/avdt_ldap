@@ -13,15 +13,13 @@ gem "avdt_ldap"
 
 === Rails 2
 
-Add this to your +environment.rb+ file.
+Add this to your +environment.rb+ file:
 
 config.gem "avdt_ldap"
 
 == Usage
 
-Just add a config file named ldap.yml in your +project_home/config/initializers.rb+.
+Just add a config file named ldap.yml in your +project_home/config/initializers.rb+:
 
 === Single directory authentication
 
-
-github: http://github.com/jeremyevans/simple_ldap_authenticator/tree/master
