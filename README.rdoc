@@ -32,7 +32,7 @@ For example, inside the avdt_ldap initializer:
 
 Inside this file you have to specify connection parameters for all the directories on which to verify users credentials
 
-Example file
+Example file:
 
   common: &com
     host: ldap.yourhost.com
@@ -60,6 +60,11 @@ Not specified parameters will be set to the default values
 
 === Single directory authentication
 
+For verify user's credentials on the default directory (i.e the environment-specific one) simply do this:
+
+  AvdtLdap.new().valid?(username, password)
+
+As mentioned this will try to authenticate the user on the environment-specific directory (for example on the development one)
 
 
 
