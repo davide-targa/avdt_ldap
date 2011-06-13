@@ -19,7 +19,7 @@ Add this to your environment.rb file:
 
 == Usage
 
-Just add a config file named ldap.yml in config/initializers.rb.
+Just add a config file named ldap.yml in config/ directory.
 
 You can change default file name by setting +ldap_config_file+ configuration parameter.
 For example, inside the avdt_ldap initializer:
@@ -55,7 +55,8 @@ Example file
     attribute: cn
     base: ou=Users,dc=foo,dc=bar
 
-Here we have specified common data (the same for every environment) and another directory (foobar) configurations parameters. 
+Here we have specified common data (the same for every environment) and another directory (foobar) configurations parameters.
+Not specified parameters will be set to the default values
 
 === Single directory authentication
 
