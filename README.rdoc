@@ -9,13 +9,13 @@ It requires 'net/ldap' gem (automatically installed)
 
 Add this to your +Gemfile+ and run the +bundle+ command:
 
-gem "avdt_ldap"
+  gem "avdt_ldap"
 
 === Rails 2
 
 Add this to your environment.rb file:
 
-config.gem "avdt_ldap"
+  config.gem "avdt_ldap"
 
 == Usage
 
