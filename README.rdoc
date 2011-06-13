@@ -70,13 +70,22 @@ As mentioned this will try to authenticate the user on the environment-specific 
 
 If you have to check user's credentials on multiple directories, for example because you don't know on which one user data is stored, you have to define the configuration parameters of the new directory(ies) inside ldap.yml. In our example we have defined +foobar+ as further directory on which to perform user's authentication.
 
-The new() method accepts an hash of parameters to specify on which directories authentication should be performed. In our case the code looks like this:
+The new() method accepts an hash of parameters to specify on which directories authentication should be performed. In our case the code will look like this:
 
   a = AvdtLdap.new(:directories => [:foobar], :include_default => true)
   a.valid?(login,password)
   => true
 
-The +:include_default+ option is used to specify if the authentication shoud be performed also on environment-specific directory server (default is +false+)
+The +include_default+ option is used to specify if the authentication shoud be performed also on environment-specific directory server (default is +false+)
+
+=== User's attributes access
+
+On both cases (single and multiple directories) if the authentication process is successfull, you can access user's attributes simply by call a method with the same name of the desired attribute on your AvdtLdap object. For example let's suppose we want user's name and surname (+givenName+ and +sn+ attributes on the directory), than you can do this:
+
+  username = a.givenname
+  surname = a.cn
+
+Note: this methods must be called on lowercase
 
 
 
