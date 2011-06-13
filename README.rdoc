@@ -85,7 +85,7 @@ On both cases (single and multiple directories) if the authentication process is
   username = a.givenname
   surname = a.cn
 
-Note: this methods must be called on lowercase
+Note: theese methods must be called on lowercase
 
 
 
