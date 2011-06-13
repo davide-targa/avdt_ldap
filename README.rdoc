@@ -28,7 +28,37 @@ For example, inside the avdt_ldap initializer:
     c.ldap_config_file = "#{Rails.root}/config/foobar.yml"
   end
 
+== ldap.yml
+
+Inside this file you have to specify connection parameters for all the directories on which to verify users credentials
+
+Example file
+
+  common: &com
+    host: ldap.yourhost.com
+    port: 389
+    attribute: uid
+    base: ou=People,dc=example,dc=com
+    ssl: false
+
+  development:
+    <<: *com
+
+  test:
+    <<: *com
+
+  production:
+    <<: *com
+
+  foobar:
+    host: foobar.yourhost.com
+    attribute: cn
+    base: ou=Users,dc=foo,dc=bar
+
+Here we have specified common data (the same for every environment) and another directory (foobar) configurations parameters. 
+
 === Single directory authentication
+
 
 
 
