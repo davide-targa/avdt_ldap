@@ -1,0 +1,28 @@
+= AvdtLdap
+=========
+
+This gem supports LDAP authentication both on sigle and multiple servers with a minimal configuration.
+It requires 'net/ldap' gem (automatically installed)
+
+== Installation
+
+=== Rails 3
+
+Add this to your +Gemfile+ and run the +bundle+ command:
+
+gem 'avdt_ldap'
+
+=== Rails 2
+
+Add this to your +environment.rb+ file:
+
+config.gem 'avdt_ldap'
+
+== Usage
+
+Just add a config file named ldap.yml in your +project_home/config/initializers.rb+
+
+=== Single directory authentication
+
+
+github: http://github.com/jeremyevans/simple_ldap_authenticator/tree/master

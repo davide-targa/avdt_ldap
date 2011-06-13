@@ -1,0 +1,21 @@
+
+common: &com
+  :host: ldap.unife.it
+  :port: 389
+  :attribute: uid
+  :base: ou=People,dc=unife,dc=it
+  :ssl: false
+
+development:
+  <<: *com
+
+test:
+  <<: *com
+
+production:
+  <<: *com
+  
+pippo:
+  :host: ldap.student.unife.it
+  :attribute: uid
+  :base: ou=People,dc=student,dc=unife,dc=it
