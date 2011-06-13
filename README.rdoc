@@ -9,19 +9,26 @@ It requires 'net/ldap' gem (automatically installed)
 
 Add this to your +Gemfile+ and run the +bundle+ command:
 
-gem "avdt_ldap"
+  gem "avdt_ldap"
 
 === Rails 2
 
-Add this to your +environment.rb+ file.
+Add this to your environment.rb file:
 
-config.gem "avdt_ldap"
+  config.gem "avdt_ldap"
 
 == Usage
 
-Just add a config file named ldap.yml in your +project_home/config/initializers.rb+.
+Just add a config file named ldap.yml in config/initializers.rb.
+
+You can change default file name by setting +ldap_config_file+ configuration parameter.
+For example, inside the avdt_ldap initializer:
+
+  AvdtLdap.configure do |c|
+    c.ldap_config_file = "#{Rails.root}/config/foobar.yml"
+  end
 
 === Single directory authentication
 
 
-github: http://github.com/jeremyevans/simple_ldap_authenticator/tree/master
+
