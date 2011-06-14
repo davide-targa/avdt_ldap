@@ -53,7 +53,7 @@ class AvdtLdap
   # Loads ldap configuration file and sets up the object's parameters
   def initialize(args = {})
     if File.exist?(AvdtLdap.configuration.ldap_config_file)
-      @LDAP = YAML.load_file(AvdtLdap.configuration.ldap_config_file).symbolize_keys
+      @LDAP = YAML.load_file(AvdtLdap.configuration.ldap_config_file).symbolize_keys!
     else
       raise "AvdtLdap: File #{AvdtLdap.configuration.ldap_config_file} not found, maybe you forgot to define it ?"
     end
@@ -83,6 +83,7 @@ class AvdtLdap
             return true
           else
             logger.info("Error attempting to authenticate #{login.to_s} by #{host(ldap)}: #{conn.get_operation_result.code} #{conn.get_operation_result.message}") if logger
+            return false
           end
         rescue Net::LDAP::LdapError => error
           logger.info("Error attempting to authenticate #{login.to_s} by #{host(ldap)}: #{error.message}") if logger
