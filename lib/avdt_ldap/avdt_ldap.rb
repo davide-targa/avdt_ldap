@@ -5,24 +5,33 @@
 # It requires 'net/ldap' gem.
 # 
 # USAGE
-# Single directory authentication
+# Single directory authentication:
 # Autentication attempt will be made on environment-specific directory (i.e "development")
 # 
 # AvdtLdap.new.valid?(login, password)
 # => true (false)
 #
-# Multiple directories authentication
+# Multiple directories authentication:
 # Here we have authentication attemps made on 2 directories: the "foobar" and
 # the default (i.e environment-specific one)
 #
 #  a = AvdtLdap.new(:directories => [:foobar], :include_default => true)
 #  a.valid?(login,password)
 #  => true (false)
-
-
+#
+# User's attributes access:
+# If you have to access (read) user's attributes from the directory you can
+# use the handy methods provided by the gem. Let's suppose we need two attributes,
+# the user's name and surname ("givenName" and "sn" attributes on the directory).
+# Simply access attributes as in the example below:
+#
+# a = AvdtLdap.new.valid?(login, password)
+# name = a.givenname
+# surname = a.cn
+#
+# As you can see methods names reflects attribute's name (but always in downcase).
 
 require 'net/ldap'
-require 'configuration'
 
 class AvdtLdap
 
@@ -30,7 +39,7 @@ class AvdtLdap
     attr_accessor :configuration
   end
 
-  attr_accessor :directories, :include_default, :user_attributes
+  attr_accessor :directories, :include_default, :user_attributes, :user_location
   #attr_accessor :configuration
 
   def initialize(args = {})
@@ -42,7 +51,6 @@ class AvdtLdap
     @directories = args[:directories] || []
     @directories << Rails.env if ((@directories.any? and args[:include_default]) or !@directories.any?)
   end
-
   
   def valid? login, password
     @directories.each do |ldap|
@@ -58,6 +66,7 @@ class AvdtLdap
               class_eval "attr_reader :#{k}"
               self.instance_variable_set "@#{k}".to_sym, v
             end
+            @user_location = ldap
             return true
           else
             logger.info("Error attempting to authenticate #{login.to_s} by #{host(ldap)}: #{conn.get_operation_result.code} #{conn.get_operation_result.message}") if logger

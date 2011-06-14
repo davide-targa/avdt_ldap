@@ -87,6 +87,16 @@ On both cases (single and multiple directories) if the authentication process is
 
 Note: theese methods must be called on lowercase
 
+You can also access the whole attributes hash by calling:
+
+  a.user_attributes
+
+==== On which directory is located the user ?
+
+You can know it by calling the +user_location+ method on you AvdtLdap object:
+
+  location = a.user_location
+
 
 
 
