@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name	= 'avdt_ldap'
-  s.version	= '0.0.0'
+  s.version	= '0.1.0'
   s.date	= '2011-06-10'
   s.summary	= "First relase"
   s.description = "Bundle of functions for authentication on, even multiple, LDAP servers"
