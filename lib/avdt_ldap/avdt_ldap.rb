@@ -30,6 +30,14 @@
 # surname = a.cn
 #
 # As you can see methods names reflects attribute's name (but always in downcase).
+# You can also access the whole attributes hash by calling:
+
+# a.user_attributes
+#
+# On which directory is located the user ?
+# You can know it by calling the +user_location+ method on your AvdtLdap object:
+#
+# location = a.user_location
 
 require 'net/ldap'
 
@@ -42,6 +50,7 @@ class AvdtLdap
   attr_accessor :directories, :include_default, :user_attributes, :user_location
   #attr_accessor :configuration
 
+  # Loads ldap configuration file and sets up the object's parameters
   def initialize(args = {})
     if File.exist?(AvdtLdap.configuration.ldap_config_file)
       @LDAP = YAML.load_file(AvdtLdap.configuration.ldap_config_file).symbolize_keys
@@ -51,7 +60,11 @@ class AvdtLdap
     @directories = args[:directories] || []
     @directories << Rails.env if ((@directories.any? and args[:include_default]) or !@directories.any?)
   end
-  
+
+  # Checks for user's existance on specified directories. Just pass "login" and
+  # "password" parameters to chech if a user resides on one of the directories.
+  # After this method calling, if the user is authenticated, his (directory)
+  # attributes are availaible.
   def valid? login, password
     @directories.each do |ldap|
       ldap = ldap.to_s
@@ -82,6 +95,7 @@ class AvdtLdap
     end
   end
 
+  # Adds configuration ability to the gem
   def self.configuration
     @configuration ||= Configuration.new
   end
@@ -92,30 +106,32 @@ class AvdtLdap
 
   private
 
+  # Given a directory name returns a connection to that server using parameters
+  # specified in ldap.yml
   def connection(which_ldap)
     Net::LDAP.new(:host => host(which_ldap), :port => port(which_ldap), :encryption => (:simple_tls if ssl?(which_ldap)))
   end
-
+  # Given a directory return it's host name
   def host(which_ldap)
     @LDAP[which_ldap][:host] || "127.0.0.1"
   end
-
+  # Given a directory returns it's host port
   def port(which_ldap)
     ssl?(which_ldap) ? (@LDAP[which_ldap][:port] || 636) : (@LDAP[which_ldap][:port] || 389)
   end
-
+  # Given a directory returns it's attribute (example: uid)
   def attribute(which_ldap)
     @LDAP[which_ldap][:attribute] || "uid"
   end
-
+  # Given a directory returns it's base path (example ou=People,dc=foo,dc=bar)
   def base(which_ldap)
     @LDAP[which_ldap][:base] || "%s"
   end
-
+  # Given a directory returns if connection should use ssl
   def ssl?(which_ldap)
     @LDAP[which_ldap][:ssl] ? true : false
   end
-
+  # Returns Rails Default logger
   def logger
     Rails.logger
   end

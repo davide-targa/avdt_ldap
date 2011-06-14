@@ -76,7 +76,9 @@ The new() method accepts an hash of parameters to specify on which directories a
   a.valid?(login,password)
   => true
 
-The +include_default+ option is used to specify if the authentication shoud be performed also on environment-specific directory server (default is +false+)
+The +include_default+ option is used to specify if the authentication shoud be performed also on environment-specific directory server (default is +false+).
+
+NOTE: The authentication process stops as soon as one positive match is found, so it's possible that not all the directories are queried.
 
 === User's attributes access
 
@@ -93,7 +95,7 @@ You can also access the whole attributes hash by calling:
 
 ==== On which directory is located the user ?
 
-You can know it by calling the +user_location+ method on you AvdtLdap object:
+You can know it by calling the +user_location+ method on your AvdtLdap object:
 
   location = a.user_location
 
