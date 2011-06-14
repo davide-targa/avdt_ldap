@@ -4,6 +4,7 @@ class Hash
   # Example:
   # {"one" => "two", "three" => "four"}.symbolize_keys
   # => {:one=>"two", :three=>"four"}
+  #
   def symbolize_keys!
     t = self.dup
     self.clear

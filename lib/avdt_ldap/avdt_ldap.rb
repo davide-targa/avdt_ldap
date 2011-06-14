@@ -43,12 +43,13 @@ require 'net/ldap'
 
 class AvdtLdap
 
+  # Used to simplify configuration from rails initializers.
+  # Works with the methods configuration and configure defined below.
   class << self
     attr_accessor :configuration
   end
 
   attr_accessor :directories, :include_default, :user_attributes, :user_location
-  #attr_accessor :configuration
 
   # Loads ldap configuration file and sets up the object's parameters
   def initialize(args = {})
