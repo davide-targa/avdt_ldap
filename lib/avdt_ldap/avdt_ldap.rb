@@ -3,6 +3,23 @@
 # This gem supports LDAP authentication both on sigle and multiple servers
 # with a minimal configuration.
 # It requires 'net/ldap' gem.
+# 
+# USAGE
+# Single directory authentication
+# Autentication attempt will be made on environment-specific directory (i.e "development")
+# 
+# AvdtLdap.new.valid?(login, password)
+# => true (false)
+#
+# Multiple directories authentication
+# Here we have authentication attemps made on 2 directories: the "foobar" and
+# the default (i.e environment-specific one)
+#
+#  a = AvdtLdap.new(:directories => [:foobar], :include_default => true)
+#  a.valid?(login,password)
+#  => true (false)
+
+
 
 require 'net/ldap'
 require 'configuration'
@@ -17,19 +34,16 @@ class AvdtLdap
   #attr_accessor :configuration
 
   def initialize(args = {})
-    logger.debug "\n\n\n#{AvdtLdap.configuration.inspect}\n\n\n"
-    if File.exist?(AvdtLdap.configuration.directories_config_file)
-      @LDAP = YAML.load_file(AvdtLdap.configuration.directories_config_file)
+    if File.exist?(AvdtLdap.configuration.ldap_config_file)
+      @LDAP = YAML.load_file(AvdtLdap.configuration.ldap_config_file).symbolize_keys
     else
-      raise "AvdtLdap: File #{AvdtLdap.configuration.directories_config_file} not found, maybe you forgot to define it ?"
+      raise "AvdtLdap: File #{AvdtLdap.configuration.ldap_config_file} not found, maybe you forgot to define it ?"
     end
     @directories = args[:directories] || []
     @directories << Rails.env if ((@directories.any? and args[:include_default]) or !@directories.any?)
   end
 
-  # if :directories options is specified, then search for :include_default option
-  # case default_option
-  # when specified => add default ldap to directories list
+  
   def valid? login, password
     @directories.each do |ldap|
       ldap = ldap.to_s

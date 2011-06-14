@@ -1,0 +1,20 @@
+ common: &com
+    host: ldap.yourhost.com
+    port: 389
+    attribute: uid
+    base: ou=People,dc=example,dc=com
+    ssl: false
+
+  development:
+    <<: *com
+
+  test:
+    <<: *com
+
+  production:
+    <<: *com
+
+  foobar:
+    host: foobar.yourhost.com
+    attribute: cn
+    base: ou=Users,dc=foo,dc=bar

@@ -1,7 +1,7 @@
 class Configuration
-  attr_accessor :dir
+  attr_accessor :ldap_config_file
 
   def initialize
-    @dir = "default.yml"
+    @ldap_config_file = "#{Rails.root}/config/ldap.yml"
   end
 end
