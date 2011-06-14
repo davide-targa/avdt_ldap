@@ -1,8 +1,8 @@
 Gem::Specification.new do |s|
   s.name	= 'avdt_ldap'
-  s.version	= '0.1.6'
+  s.version	= '0.1.8'
   s.date	= '2011-06-10'
-  s.summary	= "Fixex utilities => Hash => symbolize_keys"
+  s.summary	= "Changed require 'avdt_ldap/utilities' => 'avdt_ldap/hash'"
   s.description = "Simple LDAP authentication library that manages even multiple LDAP servers"
   s.add_runtime_dependency "net-ldap"
   s.authors	= ["Alessandro Verlato", "Davide Targa"]

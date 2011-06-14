@@ -67,7 +67,7 @@ class AvdtLdap
   # attributes are availaible.
   def valid? login, password
     @directories.each do |ldap|
-      ldap = ldap.to_s
+      ldap = ldap.to_sym
       unless @LDAP[ldap].nil?
         conn = connection(ldap)
         conn.authenticate("#{attribute(ldap)}=#{login.to_s},#{base(ldap)}", password.to_s)
