@@ -58,7 +58,7 @@ class AvdtLdap
       raise "AvdtLdap: File #{AvdtLdap.configuration.ldap_config_file} not found, maybe you forgot to define it ?"
     end
     @directories = args[:directories] || []
-    @directories << Rails.env if ((@directories.any? and args[:include_default]) or !@directories.any?)
+    @directories << Rails.env.to_sym if ((@directories.any? and args[:include_default]) or !@directories.any?)
   end
 
   # Checks for user's existance on specified directories. Just pass "login" and
@@ -83,7 +83,6 @@ class AvdtLdap
             return true
           else
             logger.info("Error attempting to authenticate #{login.to_s} by #{host(ldap)}: #{conn.get_operation_result.code} #{conn.get_operation_result.message}") if logger
-            return false
           end
         rescue Net::LDAP::LdapError => error
           logger.info("Error attempting to authenticate #{login.to_s} by #{host(ldap)}: #{error.message}") if logger
@@ -94,6 +93,7 @@ class AvdtLdap
         raise Net::LDAP::LdapError, "\"#{ldap}\" directory data are missing in ldap.yml"
       end
     end
+    false
   end
 
   # Adds configuration ability to the gem
