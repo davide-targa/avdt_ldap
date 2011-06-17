@@ -1,7 +1,7 @@
 = AvdtLdap
 
 This gem supports LDAP authentication both on sigle and multiple servers with a minimal configuration.
-It requires 'net/ldap' gem (automatically installed)
+It requires 'net-ldap' gem (automatically installed)
 
 == Installation
 
@@ -56,7 +56,13 @@ Example file:
     base: ou=Users,dc=foo,dc=bar
 
 Here we have specified common data (the same for every environment) and another directory (foobar) configuration parameters.
-Not specified parameters will be set to the default values.
+Not specified parameters will be set to the default values:
+
+  host: "127.0.0.1"
+  port: 389
+  attribute: uid
+  base: %s
+  ssl: false
 
 === Single directory authentication
 
