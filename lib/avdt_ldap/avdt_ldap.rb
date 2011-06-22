@@ -39,6 +39,8 @@
 #
 # location = a.user_location
 
+require 'net/ldap'
+
 class AvdtLdap
 
   # Used to simplify configuration from rails initializers.
