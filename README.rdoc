@@ -1,6 +1,6 @@
 = AvdtLdap
 
-This gem supports LDAP authentication both on sigle and multiple servers with a minimal configuration.
+This gem supports LDAP authentication both on sigle and multiple LDAP servers with a minimal configuration.
 It requires 'net-ldap' gem (automatically installed)
 
 == Installation
@@ -34,29 +34,43 @@ Inside this file you have to specify connection parameters for all the directori
 
 Example file:
 
-  common: &com
-    host: ldap.yourhost.com
-    port: 389
-    attribute: uid
-    base: ou=People,dc=example,dc=com
-    ssl: false
+  # All the directory attributes (except "base") are optional. Defaults are specified in the example below.
 
   development:
-    <<: *com
+    dir1:
+      host: ldap.foobar.com		# defaults to "127.0.0.1"
+      base: ou=People,dc=foobar,dc=com  # REQUIRED
+     port: 123				# defaults to 389
+      ssl: true				# defaults to false
+      attribute: cn			# defaults to "uid"
+
+
+    dir2:
+      host: ldap.goofy.foobar.com
+      base: ou=People,dc=goofy,dc=foobar,dc=com
 
   test:
-    <<: *com
+    dir1:
+      host: ldap.test.foobar.com
+      base: ou=People,dc=foobar,dc=com
+
+    dir2:
+      host: ldap.goofy.foobar.com
+      base: ou=People,dc=goofy,dc=foobar,dc=com
 
   production:
-    <<: *com
+    dir2:
+      host: ldap.live.foobar.com
+      base: ou=People,dc=foobar,dc=com
+      attribute: cn
 
-  foobar:
-    host: foobar.yourhost.com
-    attribute: cn
-    base: ou=Users,dc=foo,dc=bar
+    new_dir:
+      host: donald.duck.com
+      attribute: foo
+      base: ou=Ducks,dc=foobar,dc=com
 
-Here we have specified common data (the same for every environment) and another directory (foobar) configuration parameters.
-Not specified parameters will be set to the default values:
+
+Not specified parameters (except for "base" which is required) will be set to the default values:
 
   host: "127.0.0.1"
   port: 389
@@ -64,31 +78,28 @@ Not specified parameters will be set to the default values:
   base: %s
   ssl: false
 
-=== Single directory authentication
+== Authentication
 
-To verify user's credentials on the default directory (i.e the environment-specific one) simply do this:
+To verify user's credentials on ALL the specified directories (default) simply do this:
 
   AvdtLdap.new.valid?(login, password)
 
-As mentioned this will try to authenticate the user on the environment-specific directory (for example on the development one) and will return true or false. If authentication fails an error message, containing directory response (error message and code), will be displayed on server's logs.
+As mentioned this will try to authenticate the user on all the directories specified on ldap.yml and will return true or false.
+If authentication fails an error message, containing directory response (error message and code), will be displayed on server's logs.
 
-=== Multiple directories authentication
+=== Authentication only on specified directories
 
-If you have to check user's credentials on multiple directories, for example because you don't know on which one user data is stored, you have to define the configuration parameters of the new directory(ies) inside ldap.yml. In our example we have defined +foobar+ as further directory on which to perform user's authentication.
+If you have to check user's credentials only on some specific directories, you can pass an hash to AvdtLdap.new(), specifying on which to do the check.
 
-The new() method accepts an hash of parameters to specify on which directories authentication should be performed. In our case the code will look like this:
-
-  a = AvdtLdap.new(:directories => [:foobar], :include_default => true)
+  a = AvdtLdap.new(:directories => [:dir1,dir3])
   a.valid?(login,password)
-  => true
-
-The +include_default+ option is used to specify if the authentication shoud be performed also on environment-specific directory server (default is +false+).
+  => true   (false)
 
 NOTE: The authentication process stops as soon as one positive match is found, so it's possible that not all the directories are queried.
 
 === User's attributes access
 
-On both cases (single and multiple directories) if the authentication process is successfull, you can access user's attributes simply by call a method with the same name of the desired attribute on your AvdtLdap object. For example let's suppose we want user's name and surname (+givenName+ and +sn+ attributes on the directory), than you can do this:
+If the authentication process is successfull, you can access user's attributes simply calling a method on your AvdtLdap object, with the same name of the desired attribute. For example let's suppose we want the user's name and surname (+givenName+ and +sn+ attributes on the directory), then you can do this:
 
   username = a.givenname
   surname = a.cn
@@ -104,10 +115,3 @@ You can also access the whole attributes hash by calling:
 You can know it by calling the +user_location+ method on your AvdtLdap object:
 
   location = a.user_location
-
-
-
-
-
-
-
