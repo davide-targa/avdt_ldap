@@ -1,0 +1,113 @@
+= AvdtLdap
+
+This gem supports LDAP authentication both on sigle and multiple servers with a minimal configuration.
+It requires 'net-ldap' gem (automatically installed)
+
+== Installation
+
+=== Rails 3
+
+Add this to your +Gemfile+ and run the +bundle+ command:
+
+  gem "avdt_ldap"
+
+=== Rails 2
+
+Add this to your environment.rb file:
+
+  config.gem "avdt_ldap"
+
+== Usage
+
+Just add a config file named ldap.yml in config/ directory.
+
+You can change default file name by setting +ldap_config_file+ configuration parameter.
+For example, inside the avdt_ldap initializer:
+
+  AvdtLdap.configure do |c|
+    c.ldap_config_file = "#{Rails.root}/config/foobar.yml"
+  end
+
+== ldap.yml
+
+Inside this file you have to specify connection parameters for all the directories on which to verify users credentials
+
+Example file:
+
+  common: &com
+    host: ldap.yourhost.com
+    port: 389
+    attribute: uid
+    base: ou=People,dc=example,dc=com
+    ssl: false
+
+  development:
+    <<: *com
+
+  test:
+    <<: *com
+
+  production:
+    <<: *com
+
+  foobar:
+    host: foobar.yourhost.com
+    attribute: cn
+    base: ou=Users,dc=foo,dc=bar
+
+Here we have specified common data (the same for every environment) and another directory (foobar) configuration parameters.
+Not specified parameters will be set to the default values:
+
+  host: "127.0.0.1"
+  port: 389
+  attribute: uid
+  base: %s
+  ssl: false
+
+=== Single directory authentication
+
+To verify user's credentials on the default directory (i.e the environment-specific one) simply do this:
+
+  AvdtLdap.new.valid?(login, password)
+
+As mentioned this will try to authenticate the user on the environment-specific directory (for example on the development one) and will return true or false. If authentication fails an error message, containing directory response (error message and code), will be displayed on server's logs.
+
+=== Multiple directories authentication
+
+If you have to check user's credentials on multiple directories, for example because you don't know on which one user data is stored, you have to define the configuration parameters of the new directory(ies) inside ldap.yml. In our example we have defined +foobar+ as further directory on which to perform user's authentication.
+
+The new() method accepts an hash of parameters to specify on which directories authentication should be performed. In our case the code will look like this:
+
+  a = AvdtLdap.new(:directories => [:foobar], :include_default => true)
+  a.valid?(login,password)
+  => true
+
+The +include_default+ option is used to specify if the authentication shoud be performed also on environment-specific directory server (default is +false+).
+
+NOTE: The authentication process stops as soon as one positive match is found, so it's possible that not all the directories are queried.
+
+=== User's attributes access
+
+On both cases (single and multiple directories) if the authentication process is successfull, you can access user's attributes simply by call a method with the same name of the desired attribute on your AvdtLdap object. For example let's suppose we want user's name and surname (+givenName+ and +sn+ attributes on the directory), than you can do this:
+
+  username = a.givenname
+  surname = a.cn
+
+Note: theese methods must be called on lowercase
+
+You can also access the whole attributes hash by calling:
+
+  a.user_attributes
+
+==== On which directory is located the user ?
+
+You can know it by calling the +user_location+ method on your AvdtLdap object:
+
+  location = a.user_location
+
+
+
+
+
+
+

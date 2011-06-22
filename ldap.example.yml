@@ -1,0 +1,35 @@
+# All the directory attributes (except "base") are optional. Defaults are specified in the example below.
+
+development:
+  dir1:
+    host: ldap.foobar.com		# defaults to "127.0.0.1"
+    base: ou=People,dc=foobar,dc=com    # REQUIRED
+    port: 123				# defaults to 389
+    ssl: true				# defaults to false
+    attribute: cn			# defaults to "uid"
+    
+
+  dir2:
+    host: ldap.goofy.foobar.com
+    base: ou=People,dc=goofy,dc=foobar,dc=com
+
+test:
+  dir1: 
+    host: ldap.test.foobar.com
+    base: ou=People,dc=foobar,dc=com
+ 
+  dir2:
+    host: ldap.goofy.foobar.com
+    base: ou=People,dc=goofy,dc=foobar,dc=com
+
+production:
+  dir2:
+    host: ldap.live.foobar.com
+    base: ou=People,dc=foobar,dc=com
+    attribute: cn
+
+  new_dir:
+    host: donald.duck.com
+    attribute: foo
+    base: ou=Ducks,dc=foobar,dc=com
+    
