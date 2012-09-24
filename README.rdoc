@@ -1,4 +1,5 @@
-= AvdtLdap [![endorse](http://api.coderwall.com/davidetarga/endorsecount.png)](http://coderwall.com/davidetarga)
+= AvdtLdap
+[![endorse](http://api.coderwall.com/davidetarga/endorsecount.png)](http://coderwall.com/davidetarga)
 
 This gem supports LDAP authentication both on sigle and multiple LDAP servers with a minimal configuration.
 It requires 'net-ldap' gem (automatically installed)
