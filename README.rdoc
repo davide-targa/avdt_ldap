@@ -1,6 +1,6 @@
 = AvdtLdap
 
-This gem supports LDAP authentication both on sigle and multiple LDAP servers with a minimal configuration.
+This gem supports LDAP authentication both on single and multiple LDAP servers with a minimal configuration.
 It requires 'net-ldap' gem (automatically installed)
 
 == Installation
@@ -91,7 +91,7 @@ If authentication fails an error message, containing directory response (error m
 
 If you have to check user's credentials only on some specific directories, you can pass an hash to AvdtLdap.new(), specifying on which to do the check.
 
-  a = AvdtLdap.new(:directories => [:dir1,dir3])
+  a = AvdtLdap.new(:directories => [:dir1, :dir3])
   a.valid?(login,password)
   => true   (false)
 
